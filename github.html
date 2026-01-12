@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git & GitHub Cheat Sheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold-50: #fefce8;
+            --gold-100: #fef9c3;
+            --gold-200: #fef08a;
+            --gold-300: #fde047;
+            --gold-400: #facc15;
+            --gold-500: #eab308;
+            --gold-600: #ca8a04;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --slate-950: #020617;
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, var(--slate-950) 0%, var(--slate-900) 50%, #0c1322 100%);
+            min-height: 100vh;
+        }
+        
+        code, .code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .command-block {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(234, 179, 8, 0.15);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .command-block:hover {
+            border-color: rgba(234, 179, 8, 0.4);
+            box-shadow: 0 0 20px rgba(234, 179, 8, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .command-block:active {
+            transform: translateY(0);
+        }
+        
+        .section-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(234, 179, 8, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .gold-glow {
+            text-shadow: 0 0 30px rgba(234, 179, 8, 0.3);
+        }
+        
+        .category-badge {
+            background: linear-gradient(135deg, var(--gold-600) 0%, var(--gold-500) 100%);
+        }
+
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(234, 179, 8, 0.1);
+        }
+
+        .example-block {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--gold-500);
+        }
+
+        .use-table th {
+            background: rgba(234, 179, 8, 0.1);
+        }
+
+        .use-table td {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .click-hint {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Print styles */
+        @media print {
+            body { background: white; }
+            .section-card { background: #f8f8f8; border: 1px solid #ddd; }
+            .command-block { background: #f0f0f0; border: 1px solid #ccc; }
+            code { color: #1a1a1a; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body class="text-slate-200 p-6 lg:p-10">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="mb-10">
+            <div class="flex items-center gap-4 mb-2">
+                <div class="w-12 h-12 rounded-xl category-badge flex items-center justify-center">
+                    <svg class="w-7 h-7 text-slate-900" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-3xl lg:text-4xl font-bold text-gold-400 gold-glow">Git & GitHub Cheat Sheet</h1>
+                    <p class="text-slate-400 text-sm mt-1">Quick reference for common commands <span class="click-hint text-gold-400">• Click any command for details</span></p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            
+            <!-- SETUP & CONFIG -->
+            <section class="section-card rounded-2xl p-5">
+                <h2 class="text-lg font-semibold text-gold-400 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-gold-400"></span>
+                    Setup & Config
+                </h2>
+                <div class="space-y-3">
+                    <div class="command-block rounded-lg p-3" data-cmd="config-name">
+                        <code class="text-emerald-400 text-sm">git config --global user.name "Your Name"</code>
+                        <p class="text-slate-400 text-xs mt-1">Set your name for commits</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="config-email">
+                        <code class="text-emerald-400 text-sm">git config --global user.email "you@email.com"</code>
+                        <p class="text-slate-400 text-xs mt-1">Set your email for commits</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="config-list">
+                        <code class="text-emerald-400 text-sm">git config --list</code>
+                        <p class="text-slate-400 text-xs mt-1">Show all config settings</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="init">
+                        <code class="text-emerald-400 text-sm">git init</code>
+                        <p class="text-slate-400 text-xs mt-1">Initialize new repo in current folder</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="clone">
+                        <code class="text-emerald-400 text-sm">git clone &lt;url&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Clone a remote repo locally</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BASIC WORKFLOW -->
+            <section class="section-card rounded-2xl p-5">
+                <h2 class="text-lg font-semibold text-gold-400 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-gold-400"></span>
+                    Basic Workflow
+                </h2>
+                <div class="space-y-3">
+                    <div class="command-block rounded-lg p-3" data-cmd="status">
+                        <code class="text-emerald-400 text-sm">git status</code>
+                        <p class="text-slate-400 text-xs mt-1">Check what's changed</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="add-all">
+                        <code class="text-emerald-400 text-sm">git add .</code>
+                        <p class="text-slate-400 text-xs mt-1">Stage ALL changes</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="add-file">
+                        <code class="text-emerald-400 text-sm">git add &lt;file&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Stage specific file</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="commit">
+                        <code class="text-emerald-400 text-sm">git commit -m "message"</code>
+                        <p class="text-slate-400 text-xs mt-1">Commit with message</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="commit-am">
+                        <code class="text-emerald-400 text-sm">git commit -am "message"</code>
+                        <p class="text-slate-400 text-xs mt-1">Add + commit tracked files in one shot</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="push">
+                        <code class="text-emerald-400 text-sm">git push</code>
+                        <p class="text-slate-400 text-xs mt-1">Push commits to remote</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="pull">
+                        <code class="text-emerald-400 text-sm">git pull</code>
+                        <p class="text-slate-400 text-xs mt-1">Fetch + merge from remote</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BRANCHES -->
+            <section class="section-card rounded-2xl p-5">
+                <h2 class="text-lg font-semibold text-gold-400 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-gold-400"></span>
+                    Branches
+                </h2>
+                <div class="space-y-3">
+                    <div class="command-block rounded-lg p-3" data-cmd="branch">
+                        <code class="text-emerald-400 text-sm">git branch</code>
+                        <p class="text-slate-400 text-xs mt-1">List local branches</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="branch-all">
+                        <code class="text-emerald-400 text-sm">git branch -a</code>
+                        <p class="text-slate-400 text-xs mt-1">List ALL branches (local + remote)</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="branch-create">
+                        <code class="text-emerald-400 text-sm">git branch &lt;name&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Create new branch</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="checkout">
+                        <code class="text-emerald-400 text-sm">git checkout &lt;branch&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Switch to branch</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="checkout-b">
+                        <code class="text-emerald-400 text-sm">git checkout -b &lt;name&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Create AND switch to new branch</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="branch-delete">
+                        <code class="text-emerald-400 text-sm">git branch -d &lt;name&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Delete branch (safe)</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="branch-force-delete">
+                        <code class="text-emerald-400 text-sm">git branch -D &lt;name&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Force delete branch</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MERGING -->
+            <section class="section-card rounded-2xl p-5">
+                <h2 class="text-lg font-semibold text-gold-400 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-gold-400"></span>
+                    Merging
+                </h2>
+                <div class="space-y-3">
+                    <div class="command-block rounded-lg p-3" data-cmd="merge">
+                        <code class="text-emerald-400 text-sm">git merge &lt;branch&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Merge branch into current branch</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="merge-no-ff">
+                        <code class="text-emerald-400 text-sm">git merge --no-ff &lt;branch&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Merge with commit (no fast-forward)</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="merge-abort">
+                        <code class="text-emerald-400 text-sm">git merge --abort</code>
+                        <p class="text-slate-400 text-xs mt-1">Abort a merge with conflicts</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="rebase">
+                        <code class="text-emerald-400 text-sm">git rebase &lt;branch&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Rebase current onto branch</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="rebase-abort">
+                        <code class="text-emerald-400 text-sm">git rebase --abort</code>
+                        <p class="text-slate-400 text-xs mt-1">Abort a rebase</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REMOTES -->
+            <section class="section-card rounded-2xl p-5">
+                <h2 class="text-lg font-semibold text-gold-400 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-gold-400"></span>
+                    Remotes
+                </h2>
+                <div class="space-y-3">
+                    <div class="command-block rounded-lg p-3" data-cmd="remote-v">
+                        <code class="text-emerald-400 text-sm">git remote -v</code>
+                        <p class="text-slate-400 text-xs mt-1">Show remote URLs</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="remote-add">
+                        <code class="text-emerald-400 text-sm">git remote add origin &lt;url&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Add remote called "origin"</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="push-u">
+                        <code class="text-emerald-400 text-sm">git push -u origin &lt;branch&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Push and set upstream (first push)</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="fetch">
+                        <code class="text-emerald-400 text-sm">git fetch</code>
+                        <p class="text-slate-400 text-xs mt-1">Download remote changes (no merge)</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="push-delete">
+                        <code class="text-emerald-400 text-sm">git push origin --delete &lt;branch&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Delete remote branch</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HISTORY & LOGS -->
+            <section class="section-card rounded-2xl p-5">
+                <h2 class="text-lg font-semibold text-gold-400 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-gold-400"></span>
+                    History & Logs
+                </h2>
+                <div class="space-y-3">
+                    <div class="command-block rounded-lg p-3" data-cmd="log">
+                        <code class="text-emerald-400 text-sm">git log</code>
+                        <p class="text-slate-400 text-xs mt-1">Show commit history</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="log-oneline">
+                        <code class="text-emerald-400 text-sm">git log --oneline</code>
+                        <p class="text-slate-400 text-xs mt-1">Compact one-line log</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="log-graph">
+                        <code class="text-emerald-400 text-sm">git log --graph --oneline</code>
+                        <p class="text-slate-400 text-xs mt-1">Visual branch graph</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="diff">
+                        <code class="text-emerald-400 text-sm">git diff</code>
+                        <p class="text-slate-400 text-xs mt-1">Show unstaged changes</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="diff-staged">
+                        <code class="text-emerald-400 text-sm">git diff --staged</code>
+                        <p class="text-slate-400 text-xs mt-1">Show staged changes</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="show">
+                        <code class="text-emerald-400 text-sm">git show &lt;commit&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Show specific commit details</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- UNDOING STUFF -->
+            <section class="section-card rounded-2xl p-5 lg:col-span-2 xl:col-span-1">
+                <h2 class="text-lg font-semibold text-red-400 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-red-400"></span>
+                    Undoing Stuff (Be Careful)
+                </h2>
+                <div class="space-y-3">
+                    <div class="command-block rounded-lg p-3 border-red-500/20" data-cmd="checkout-file">
+                        <code class="text-emerald-400 text-sm">git checkout -- &lt;file&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Discard changes to file</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3 border-red-500/20" data-cmd="reset-head">
+                        <code class="text-emerald-400 text-sm">git reset HEAD &lt;file&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Unstage a file</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3 border-red-500/20" data-cmd="reset-soft">
+                        <code class="text-emerald-400 text-sm">git reset --soft HEAD~1</code>
+                        <p class="text-slate-400 text-xs mt-1">Undo last commit, keep changes staged</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3 border-red-500/20" data-cmd="reset-hard">
+                        <code class="text-emerald-400 text-sm">git reset --hard HEAD~1</code>
+                        <p class="text-slate-400 text-xs mt-1">⚠️ Undo last commit, DELETE changes</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3 border-red-500/20" data-cmd="revert">
+                        <code class="text-emerald-400 text-sm">git revert &lt;commit&gt;</code>
+                        <p class="text-slate-400 text-xs mt-1">Create new commit that undoes a commit</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3 border-red-500/20" data-cmd="clean">
+                        <code class="text-emerald-400 text-sm">git clean -fd</code>
+                        <p class="text-slate-400 text-xs mt-1">⚠️ Delete untracked files & folders</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STASHING -->
+            <section class="section-card rounded-2xl p-5">
+                <h2 class="text-lg font-semibold text-gold-400 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-gold-400"></span>
+                    Stashing
+                </h2>
+                <div class="space-y-3">
+                    <div class="command-block rounded-lg p-3" data-cmd="stash">
+                        <code class="text-emerald-400 text-sm">git stash</code>
+                        <p class="text-slate-400 text-xs mt-1">Stash current changes</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="stash-save">
+                        <code class="text-emerald-400 text-sm">git stash save "message"</code>
+                        <p class="text-slate-400 text-xs mt-1">Stash with description</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="stash-list">
+                        <code class="text-emerald-400 text-sm">git stash list</code>
+                        <p class="text-slate-400 text-xs mt-1">List all stashes</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="stash-pop">
+                        <code class="text-emerald-400 text-sm">git stash pop</code>
+                        <p class="text-slate-400 text-xs mt-1">Apply and remove latest stash</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="stash-apply">
+                        <code class="text-emerald-400 text-sm">git stash apply</code>
+                        <p class="text-slate-400 text-xs mt-1">Apply stash (keep in stash list)</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="stash-drop">
+                        <code class="text-emerald-400 text-sm">git stash drop</code>
+                        <p class="text-slate-400 text-xs mt-1">Delete latest stash</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAGS -->
+            <section class="section-card rounded-2xl p-5">
+                <h2 class="text-lg font-semibold text-gold-400 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-gold-400"></span>
+                    Tags
+                </h2>
+                <div class="space-y-3">
+                    <div class="command-block rounded-lg p-3" data-cmd="tag">
+                        <code class="text-emerald-400 text-sm">git tag</code>
+                        <p class="text-slate-400 text-xs mt-1">List all tags</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="tag-create">
+                        <code class="text-emerald-400 text-sm">git tag v1.0.0</code>
+                        <p class="text-slate-400 text-xs mt-1">Create lightweight tag</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="tag-annotated">
+                        <code class="text-emerald-400 text-sm">git tag -a v1.0.0 -m "msg"</code>
+                        <p class="text-slate-400 text-xs mt-1">Create annotated tag</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="push-tag">
+                        <code class="text-emerald-400 text-sm">git push origin v1.0.0</code>
+                        <p class="text-slate-400 text-xs mt-1">Push specific tag</p>
+                    </div>
+                    <div class="command-block rounded-lg p-3" data-cmd="push-tags">
+                        <code class="text-emerald-400 text-sm">git push origin --tags</code>
+                        <p class="text-slate-400 text-xs mt-1">Push all tags</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Quick Reference Bar -->
+        <div class="mt-10 section-card rounded-2xl p-5">
+            <h2 class="text-lg font-semibold text-gold-400 mb-4">⚡ Quick Reference: The 80/20</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                <div class="bg-slate-900/50 rounded-lg p-4 cursor-pointer hover:bg-slate-900/70 transition-colors" data-cmd="clone">
+                    <p class="text-slate-400 mb-2 font-medium">Start Fresh</p>
+                    <code class="text-emerald-400 text-xs">git clone &lt;url&gt;</code>
+                </div>
+                <div class="bg-slate-900/50 rounded-lg p-4 cursor-pointer hover:bg-slate-900/70 transition-colors" data-cmd="commit">
+                    <p class="text-slate-400 mb-2 font-medium">Save Work</p>
+                    <code class="text-emerald-400 text-xs">git add . && git commit -m "msg"</code>
+                </div>
+                <div class="bg-slate-900/50 rounded-lg p-4 cursor-pointer hover:bg-slate-900/70 transition-colors" data-cmd="push">
+                    <p class="text-slate-400 mb-2 font-medium">Share It</p>
+                    <code class="text-emerald-400 text-xs">git push</code>
+                </div>
+                <div class="bg-slate-900/50 rounded-lg p-4 cursor-pointer hover:bg-slate-900/70 transition-colors" data-cmd="pull">
+                    <p class="text-slate-400 mb-2 font-medium">Get Latest</p>
+                    <code class="text-emerald-400 text-xs">git pull</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-8 text-center text-slate-500 text-xs">
+            <p>Ctrl+P to print • Works offline once loaded</p>
+        </footer>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0" id="modal-overlay"></div>
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content relative rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+                <!-- Close button -->
+                <button id="modal-close" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+
+                <!-- Modal Content -->
+                <div id="modal-body">
+                    <!-- Command Title -->
+                    <div class="mb-6">
+                        <code id="modal-command" class="text-emerald-400 text-lg font-semibold"></code>
+                    </div>
+
+                    <!-- ELI5 Section -->
+                    <div class="mb-6">
+                        <h3 class="text-gold-400 font-semibold mb-3 flex items-center gap-2">
+                            <span class="text-xl">🧒</span> Explain Like I'm 5
+                        </h3>
+                        <p id="modal-eli5" class="text-slate-300 leading-relaxed"></p>
+                    </div>
+
+                    <!-- Example Section -->
+                    <div class="mb-6">
+                        <h3 class="text-gold-400 font-semibold mb-3 flex items-center gap-2">
+                            <span class="text-xl">💻</span> Example
+                        </h3>
+                        <div id="modal-example" class="example-block rounded-lg p-4 font-mono text-sm text-slate-300"></div>
+                    </div>
+
+                    <!-- Use Cases Table -->
+                    <div>
+                        <h3 class="text-gold-400 font-semibold mb-3 flex items-center gap-2">
+                            <span class="text-xl">📋</span> When To Use
+                        </h3>
+                        <table class="use-table w-full text-sm rounded-lg overflow-hidden">
+                            <thead>
+                                <tr>
+                                    <th class="text-left p-3 text-emerald-400 font-medium">✅ Good For / Use When</th>
+                                    <th class="text-left p-3 text-red-400 font-medium">❌ Bad For / Don't Use When</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.js"></script>
+    <script>
+        // Command data with ELI5 explanations
+        const commandData = {
+            // SETUP & CONFIG
+            'config-name': {
+                command: 'git config --global user.name "Your Name"',
+                eli5: "Think of it like writing your name on your lunchbox. Every time you save your work (commit), Git stamps your name on it so everyone knows \"this person made these changes.\" The --global part means this name will be used for ALL your projects, not just one.",
+                example: 'git config --global user.name "Adam Smith"\n\n# Now every commit you make will show:\n# Author: Adam Smith',
+                goodFor: [
+                    "First-time Git setup on a new computer",
+                    "When you want all projects to use the same name",
+                    "Setting up your identity before your first commit"
+                ],
+                badFor: [
+                    "If you need different names for work vs personal projects (use --local instead)",
+                    "Changing someone else's commit history (that's not what this does)"
+                ]
+            },
+            'config-email': {
+                command: 'git config --global user.email "you@email.com"',
+                eli5: "This is like putting your return address on a letter. When you mail (push) your code to GitHub, they can see who sent it. GitHub uses this email to link commits to your profile, so use the same email as your GitHub account.",
+                example: 'git config --global user.email "adam@goldco.com"\n\n# GitHub will now link your commits to your profile\n# if this matches your GitHub email',
+                goodFor: [
+                    "First-time setup so commits are linked to your GitHub profile",
+                    "Making sure you get credit for your work",
+                    "Keeping commits consistent across all projects"
+                ],
+                badFor: [
+                    "If you want to hide your email (GitHub has a private email feature)",
+                    "Work projects where IT requires a specific email (use --local)"
+                ]
+            },
+            'config-list': {
+                command: 'git config --list',
+                eli5: "This is like opening your settings menu to see everything that's configured. It shows your name, email, and all the other knobs and dials Git uses. Good for sanity-checking that things are set up right.",
+                example: 'git config --list\n\n# Output:\n# user.name=Adam Smith\n# user.email=adam@goldco.com\n# core.editor=vim\n# ...',
+                goodFor: [
+                    "Checking what email/name you have configured",
+                    "Debugging when commits show wrong author",
+                    "Seeing all your Git settings in one place"
+                ],
+                badFor: [
+                    "Actually changing settings (this only shows them)",
+                    "Nothing really - it's read-only and safe"
+                ]
+            },
+            'init': {
+                command: 'git init',
+                eli5: "This is like buying a new empty photo album. You're telling Git \"Hey, I want to start tracking this folder.\" It creates a hidden .git folder that will store all your save points (commits). Nothing is saved yet - you just set up the album.",
+                example: 'cd my-new-project\ngit init\n\n# Output: Initialized empty Git repository in /my-new-project/.git/',
+                goodFor: [
+                    "Starting a brand new project from scratch",
+                    "Adding Git to an existing folder of code",
+                    "When you're the one creating the project"
+                ],
+                badFor: [
+                    "When the project already exists on GitHub (use git clone instead)",
+                    "Running it twice in the same folder (won't break anything, just pointless)"
+                ]
+            },
+            'clone': {
+                command: 'git clone <url>',
+                eli5: "This is like photocopying someone's entire notebook. You get everything - all the pages, all the history, everything. It downloads the whole project to your computer so you can work on it. The original stays on GitHub untouched.",
+                example: 'git clone https://github.com/user/repo.git\n\n# Creates a folder called "repo" with everything in it\n# You can also rename it:\ngit clone https://github.com/user/repo.git my-folder-name',
+                goodFor: [
+                    "Getting an existing project onto your computer",
+                    "Starting work on someone else's project",
+                    "Joining a team project that already exists"
+                ],
+                badFor: [
+                    "Creating a new project that doesn't exist yet (use git init)",
+                    "Updating a project you already cloned (use git pull)"
+                ]
+            },
+
+            // BASIC WORKFLOW
+            'status': {
+                command: 'git status',
+                eli5: "This is like asking \"What's changed since I last saved?\" It shows you which files are new, which ones you edited, and which ones are ready to save. Green = ready to save. Red = changed but not ready yet. Run this constantly - it's your best friend.",
+                example: 'git status\n\n# Output:\n# Changes not staged for commit:\n#   modified:   index.html    (red - edited but not staged)\n#\n# Untracked files:\n#   newfile.js               (red - brand new file)\n#\n# Changes to be committed:\n#   modified:   style.css    (green - ready to commit)',
+                goodFor: [
+                    "Before committing, to see what you're about to save",
+                    "When you forget what you were working on",
+                    "Checking if your git add worked",
+                    "Any time you feel confused about Git state"
+                ],
+                badFor: [
+                    "Nothing - run it as often as you want, it never changes anything"
+                ]
+            },
+            'add-all': {
+                command: 'git add .',
+                eli5: "This is like putting ALL your papers into the \"to be filed\" tray. The dot means \"everything in this folder.\" You're telling Git \"I want to include ALL these changes in my next save.\" They're not saved yet - just marked as ready.",
+                example: 'git add .\ngit status\n\n# Now all files should be green (staged)\n# Ready for: git commit -m "message"',
+                goodFor: [
+                    "When you want to commit everything you changed",
+                    "Quick saves where you know all changes are good",
+                    "Small projects where you changed just a few files"
+                ],
+                badFor: [
+                    "When you have files you DON'T want to commit (passwords, node_modules)",
+                    "When you want to make separate commits for different features",
+                    "If you have a messy working directory with junk files"
+                ]
+            },
+            'add-file': {
+                command: 'git add <file>',
+                eli5: "This is like picking just ONE paper to put in the \"to be filed\" tray. Instead of adding everything, you're being specific: \"Just this file, please.\" Good for when you want cleaner, more focused commits.",
+                example: '# Add just one file:\ngit add index.html\n\n# Add multiple specific files:\ngit add index.html style.css\n\n# Add all files in a folder:\ngit add src/',
+                goodFor: [
+                    "Making clean, focused commits (one feature = one commit)",
+                    "When you have unfinished work you don't want to commit yet",
+                    "Professional projects where commit history matters"
+                ],
+                badFor: [
+                    "When you genuinely want everything (use git add . instead)",
+                    "When you have 50 files to add (tedious)"
+                ]
+            },
+            'commit': {
+                command: 'git commit -m "message"',
+                eli5: "This is the actual SAVE button. Everything you staged (green files) gets saved as a snapshot with a little note attached. That note (message) should explain what you did. These saves are only on YOUR computer until you push.",
+                example: 'git commit -m "Add login button to homepage"\n\n# Good messages say WHAT you did:\n# "Fix email validation bug"\n# "Add dark mode toggle"\n# "Update pricing to $99"\n\n# Bad messages:\n# "stuff"\n# "fix"\n# "WIP"',
+                goodFor: [
+                    "Saving your work at logical stopping points",
+                    "After completing a feature or fixing a bug",
+                    "Any time you want a checkpoint you can go back to"
+                ],
+                badFor: [
+                    "Committing broken code (try to keep commits working)",
+                    "Giant commits with 50 unrelated changes (split them up)",
+                    "Committing secrets/passwords (they stay in history forever)"
+                ]
+            },
+            'commit-am': {
+                command: 'git commit -am "message"',
+                eli5: "This is a speed combo: add + commit in one shot. The -a means \"add all files you already know about\" and -m is the message. But it only works for files Git is already tracking - new files still need a separate git add.",
+                example: 'git commit -am "Fix typo in header"\n\n# Same as doing:\n# git add .\n# git commit -m "Fix typo in header"\n\n# BUT won\'t catch brand new files!',
+                goodFor: [
+                    "Quick fixes to existing files",
+                    "When you're the only one working and moving fast",
+                    "Small changes where you just want to save and move on"
+                ],
+                badFor: [
+                    "When you created new files (they won't be included)",
+                    "When you want to be selective about what to commit",
+                    "When you need to double-check with git status first"
+                ]
+            },
+            'push': {
+                command: 'git push',
+                eli5: "This uploads your saved work to GitHub (or wherever your remote is). Think of it as \"publish\" or \"sync to the cloud.\" Your commits only exist on your computer until you push. After pushing, others can see and download your changes.",
+                example: 'git push\n\n# If it\'s your first push on a new branch:\ngit push -u origin my-branch\n\n# The -u sets up tracking so future pushes just need:\ngit push',
+                goodFor: [
+                    "Backing up your work to the cloud",
+                    "Sharing your changes with teammates",
+                    "After finishing a feature or fix you want others to see"
+                ],
+                badFor: [
+                    "Pushing broken code to main/master (test first!)",
+                    "When you have merge conflicts (resolve them first)",
+                    "Force pushing to shared branches (can destroy others' work)"
+                ]
+            },
+            'pull': {
+                command: 'git pull',
+                eli5: "This downloads and applies other people's changes. It's like refreshing your notebook to get the latest pages everyone else added. It's actually two things: fetch (download) + merge (apply). Run this before starting work to avoid conflicts.",
+                example: 'git pull\n\n# Might output:\n# Updating abc123..def456\n# Fast-forward\n#  index.html | 5 ++---\n#  1 file changed, 2 insertions(+), 3 deletions(-)',
+                goodFor: [
+                    "Starting your work day (get the latest code)",
+                    "Before pushing (avoid conflicts)",
+                    "When a teammate says \"I pushed the fix\""
+                ],
+                badFor: [
+                    "When you have uncommitted changes (commit or stash first)",
+                    "If you want to preview changes before applying (use git fetch)"
+                ]
+            },
+
+            // BRANCHES
+            'branch': {
+                command: 'git branch',
+                eli5: "This shows you all the different timelines (branches) on your computer. It's like asking \"What different versions of this project exist locally?\" The one with the asterisk (*) is the one you're currently on.",
+                example: 'git branch\n\n# Output:\n#   develop\n# * main        <-- you are here\n#   feature-login',
+                goodFor: [
+                    "Seeing what branches exist locally",
+                    "Checking which branch you're currently on",
+                    "Quick overview of your local work"
+                ],
+                badFor: [
+                    "Seeing remote branches (use git branch -a)",
+                    "Creating or switching branches (different commands)"
+                ]
+            },
+            'branch-all': {
+                command: 'git branch -a',
+                eli5: "The -a means \"ALL\" - both your local branches AND the remote ones on GitHub. Remote branches show up in red and start with \"remotes/origin/\". Good for seeing the full picture of what exists.",
+                example: 'git branch -a\n\n# Output:\n#   develop\n# * main\n#   remotes/origin/main\n#   remotes/origin/feature-api\n#   remotes/origin/hotfix-123',
+                goodFor: [
+                    "Seeing what branches exist on GitHub",
+                    "Finding a branch a teammate created",
+                    "Full overview before cleaning up branches"
+                ],
+                badFor: [
+                    "Nothing really - it's just a list command",
+                    "Might be outdated if you haven't fetched recently (run git fetch first)"
+                ]
+            },
+            'branch-create': {
+                command: 'git branch <name>',
+                eli5: "This creates a new timeline that starts exactly where you are now. It's like making a photocopy of your current page to draw on. But you don't switch to it - you're still on your current branch. It just creates it.",
+                example: 'git branch feature-login\n\n# Now it exists, but you\'re still on main\ngit branch\n#   feature-login\n# * main           <-- still here',
+                goodFor: [
+                    "Creating a branch without switching to it",
+                    "Setting up multiple branches before working"
+                ],
+                badFor: [
+                    "When you want to create AND switch (use git checkout -b)",
+                    "Most cases honestly - checkout -b is more useful"
+                ]
+            },
+            'checkout': {
+                command: 'git checkout <branch>',
+                eli5: "This teleports you to another branch/timeline. All your files will change to match that branch. It's like flipping to a different chapter in a choose-your-own-adventure book. Your work on other branches stays safe.",
+                example: 'git checkout develop\n\n# Output: Switched to branch \'develop\'\n\n# Your files now show the develop version\n# Your main branch work is still saved',
+                goodFor: [
+                    "Switching between branches you're working on",
+                    "Checking out what another branch looks like",
+                    "Moving to main before creating a new feature branch"
+                ],
+                badFor: [
+                    "When you have uncommitted changes (commit or stash first)",
+                    "Creating new branches (use git checkout -b)"
+                ]
+            },
+            'checkout-b': {
+                command: 'git checkout -b <name>',
+                eli5: "The Swiss Army knife: create a new branch AND switch to it immediately. This is what you'll use 90% of the time. It's like saying \"I want to start a new experiment, starting from right here.\"",
+                example: 'git checkout -b feature-dark-mode\n\n# Output: Switched to a new branch \'feature-dark-mode\'\n\n# You\'re now on the new branch, ready to work\ngit branch\n# * feature-dark-mode\n#   main',
+                goodFor: [
+                    "Starting work on a new feature",
+                    "Creating a branch to try something risky",
+                    "Standard workflow: branch per feature/bugfix"
+                ],
+                badFor: [
+                    "If the branch already exists (you'll get an error)",
+                    "When you want to checkout an existing branch (drop the -b)"
+                ]
+            },
+            'branch-delete': {
+                command: 'git branch -d <name>',
+                eli5: "This deletes a branch, but only if it's been safely merged. The lowercase -d is the \"safe\" delete - Git will complain if you're about to lose work. It's like shredding a draft after you've published the final version.",
+                example: 'git branch -d feature-login\n\n# If merged: Deleted branch feature-login\n# If NOT merged: error: branch not fully merged\n#                use -D to force delete',
+                goodFor: [
+                    "Cleaning up branches after merging a PR",
+                    "Removing old feature branches you're done with",
+                    "Keeping your branch list tidy"
+                ],
+                badFor: [
+                    "Deleting branches with unmerged work (use -D if you're sure)",
+                    "Deleting the branch you're currently on (checkout another first)"
+                ]
+            },
+            'branch-force-delete': {
+                command: 'git branch -D <name>',
+                eli5: "The nuclear option: delete this branch NO MATTER WHAT. Even if you have unmerged commits. Capital -D means \"I know what I'm doing, just do it.\" Use carefully - you can lose work.",
+                example: 'git branch -D abandoned-experiment\n\n# Output: Deleted branch abandoned-experiment (was abc1234)\n\n# Gone forever (well, you have ~30 days to recover via reflog)',
+                goodFor: [
+                    "Deleting an experiment that went nowhere",
+                    "Cleaning up a branch you definitely don't need",
+                    "When -d complains but you're absolutely sure"
+                ],
+                badFor: [
+                    "If you're not 100% sure you don't need the code",
+                    "Deleting other people's branches without checking"
+                ]
+            },
+
+            // MERGING
+            'merge': {
+                command: 'git merge <branch>',
+                eli5: "This takes the work from another branch and combines it into your current branch. Like if you and a friend wrote different chapters, this puts them together into one document. Git usually figures out how to combine them automatically.",
+                example: '# You\'re on main, want to bring in feature-login:\ngit checkout main\ngit merge feature-login\n\n# If no conflicts: Merge made by the \'ort\' strategy\n# If conflicts: CONFLICT in file.js... fix manually',
+                goodFor: [
+                    "Bringing completed feature branches into main",
+                    "Combining work from multiple branches",
+                    "Standard PR workflow (merge feature into main)"
+                ],
+                badFor: [
+                    "When the branch has lots of messy commits (consider squash)",
+                    "Merging directly without code review on team projects"
+                ]
+            },
+            'merge-no-ff': {
+                command: 'git merge --no-ff <branch>',
+                eli5: "Same as regular merge, but ALWAYS creates a merge commit. Normally if there's no conflict, Git just slides the commits in (fast-forward). --no-ff says \"No, make it obvious that a merge happened here.\" Better for history.",
+                example: 'git merge --no-ff feature-login\n\n# Creates a commit that looks like:\n# "Merge branch \'feature-login\' into main"\n\n# Even if it could have fast-forwarded',
+                goodFor: [
+                    "When you want clear merge points in history",
+                    "Professional repos where you want to see \"this feature was added here\"",
+                    "Following Git Flow or similar branching strategies"
+                ],
+                badFor: [
+                    "Personal projects where you don't care about history details",
+                    "When you actually want a clean, linear history"
+                ]
+            },
+            'merge-abort': {
+                command: 'git merge --abort',
+                eli5: "The \"NOPE\" button. If you're in the middle of a merge and there are conflicts everywhere and you just want to go back to before you started, this cancels everything. Your branch goes back to how it was before you tried to merge.",
+                example: '# You tried to merge and got conflicts:\n# CONFLICT in file1.js\n# CONFLICT in file2.js\n# Ugh, too much. Abort!\n\ngit merge --abort\n\n# Phew, back to normal. Conflicts gone.',
+                goodFor: [
+                    "When merge conflicts are overwhelming",
+                    "When you realize you merged the wrong branch",
+                    "Buying time to think about how to handle conflicts"
+                ],
+                badFor: [
+                    "After you've already fixed and committed (too late)",
+                    "Avoiding conflicts forever (eventually you have to deal with them)"
+                ]
+            },
+            'rebase': {
+                command: 'git rebase <branch>',
+                eli5: "This rewrites your branch's history to start from the tip of another branch. Imagine your branch splits off at page 5, but main is now at page 10. Rebase moves your starting point to page 10, making it look like you started there all along. Cleaner history, but rewrites commits.",
+                example: '# Your feature branch started from old main\n# main has new commits now\n\ngit checkout feature-login\ngit rebase main\n\n# Your commits are now "on top of" the latest main',
+                goodFor: [
+                    "Keeping a clean, linear history",
+                    "Updating your branch with main's latest changes",
+                    "Before merging, to avoid merge commits"
+                ],
+                badFor: [
+                    "Branches that others are working on (rewrites history!)",
+                    "After you've already pushed (unless you force push)",
+                    "When you're confused about rebase (stick to merge)"
+                ]
+            },
+            'rebase-abort': {
+                command: 'git rebase --abort',
+                eli5: "The escape hatch for rebase. If you're in the middle of a rebase and things are going sideways, this takes you back to before you started. Same idea as merge --abort, just for rebases.",
+                example: '# Rebase is going badly:\n# CONFLICT in file.js\n# error: could not apply abc123\n\ngit rebase --abort\n\n# Back to safety. Branch is exactly as it was.',
+                goodFor: [
+                    "When a rebase is more trouble than it's worth",
+                    "When you accidentally rebased the wrong thing",
+                    "Learning rebases (abort and try again)"
+                ],
+                badFor: [
+                    "After rebase completed successfully (nothing to abort)"
+                ]
+            },
+
+            // REMOTES
+            'remote-v': {
+                command: 'git remote -v',
+                eli5: "Shows you where your code gets pushed to and pulled from. \"origin\" is usually GitHub. The -v (verbose) shows the actual URLs. Like checking \"where is this repo's cloud backup?\"",
+                example: 'git remote -v\n\n# Output:\n# origin  https://github.com/adam/myrepo.git (fetch)\n# origin  https://github.com/adam/myrepo.git (push)',
+                goodFor: [
+                    "Checking which GitHub repo you're connected to",
+                    "Debugging when push/pull goes to the wrong place",
+                    "Verifying you cloned the right repo"
+                ],
+                badFor: [
+                    "Nothing - it's just showing info"
+                ]
+            },
+            'remote-add': {
+                command: 'git remote add origin <url>',
+                eli5: "This connects your local repo to a remote (usually GitHub). After git init, your repo is alone - this gives it a phone number to call. \"origin\" is just a nickname for the URL, and it's the standard name everyone uses.",
+                example: '# After git init, connect to GitHub:\ngit remote add origin https://github.com/adam/myrepo.git\n\n# Verify it worked:\ngit remote -v',
+                goodFor: [
+                    "After git init, to connect to GitHub",
+                    "Adding a second remote (like a fork)",
+                    "Setting up a new repo you created on GitHub"
+                ],
+                badFor: [
+                    "Repos you cloned (origin is already set)",
+                    "If origin already exists (use git remote set-url instead)"
+                ]
+            },
+            'push-u': {
+                command: 'git push -u origin <branch>',
+                eli5: "The first push of a new branch. The -u (upstream) tells Git \"remember this connection.\" After this, you can just type 'git push' and Git knows where to send it. It's like saving a contact so you don't have to type the number again.",
+                example: '# First push of a new branch:\ngit push -u origin feature-login\n\n# From now on, just:\ngit push\ngit pull\n# Git remembers where to go',
+                goodFor: [
+                    "First time pushing a new branch",
+                    "Setting up tracking so future pushes are simple",
+                    "Standard workflow when starting a new feature"
+                ],
+                badFor: [
+                    "Branches that already have upstream set",
+                    "After the first push (just use git push)"
+                ]
+            },
+            'fetch': {
+                command: 'git fetch',
+                eli5: "Downloads new stuff from GitHub but doesn't apply it. It's like checking your mailbox but not opening the letters. You can see what's new without changing your current work. Safe to run anytime.",
+                example: 'git fetch\n\n# Now you can see remote branches:\ngit branch -a\n\n# Compare what changed:\ngit diff main origin/main\n\n# Then merge when ready:\ngit merge origin/main',
+                goodFor: [
+                    "Seeing what others pushed without affecting your work",
+                    "Updating your view of remote branches",
+                    "Before merging, to preview changes"
+                ],
+                badFor: [
+                    "When you just want the latest code (use git pull)",
+                    "Nothing really - it's always safe"
+                ]
+            },
+            'push-delete': {
+                command: 'git push origin --delete <branch>',
+                eli5: "Deletes a branch on GitHub. Your local copy stays (if you have one). Use this to clean up after merging PRs. It's like removing a listing from the phone book - the person still exists, just not in the book.",
+                example: 'git push origin --delete feature-login\n\n# Output: - [deleted]  feature-login\n\n# The remote branch is gone\n# Your local branch (if any) is still there',
+                goodFor: [
+                    "Cleaning up after a PR is merged",
+                    "Removing stale branches from GitHub",
+                    "Keeping the remote branch list clean"
+                ],
+                badFor: [
+                    "Deleting branches others are using (communicate first)",
+                    "Deleting main/master (you probably can't anyway)"
+                ]
+            },
+
+            // HISTORY & LOGS
+            'log': {
+                command: 'git log',
+                eli5: "Shows you the history of all saves (commits). Each entry shows who, when, and their message. It's like a diary of everything that happened. Press Q to exit when you're done scrolling.",
+                example: 'git log\n\n# Output:\n# commit abc123def456... (HEAD -> main)\n# Author: Adam <adam@goldco.com>\n# Date:   Mon Jan 6 2025\n#\n#     Add login button\n#\n# commit 789xyz...\n# ...',
+                goodFor: [
+                    "Seeing what changes were made and by whom",
+                    "Finding when something was changed",
+                    "Getting commit hashes for other commands"
+                ],
+                badFor: [
+                    "Large repos (output is overwhelming - use --oneline)"
+                ]
+            },
+            'log-oneline': {
+                command: 'git log --oneline',
+                eli5: "Same as git log but just one line per commit: the short hash and message. Much easier to scan. This is what you'll use 90% of the time.",
+                example: 'git log --oneline\n\n# Output:\n# abc1234 Add login button\n# def5678 Fix header alignment\n# 789abcd Initial commit',
+                goodFor: [
+                    "Quick scan of recent history",
+                    "Finding a commit hash to use with other commands",
+                    "Most situations where you need git log"
+                ],
+                badFor: [
+                    "When you need full details (author, date, etc.)"
+                ]
+            },
+            'log-graph': {
+                command: 'git log --graph --oneline',
+                eli5: "Shows your branch history as a visual tree with lines connecting branches. You can actually SEE where branches split and merged. Super helpful for understanding what happened.",
+                example: 'git log --graph --oneline\n\n# Output:\n# * abc123 Merge feature-login\n# |\\  \n# | * def456 Add login form\n# | * 789abc Add login button\n# |/  \n# * xyz000 Initial commit',
+                goodFor: [
+                    "Understanding how branches were merged",
+                    "Visualizing project history",
+                    "Debugging \"when did this branch split?\""
+                ],
+                badFor: [
+                    "Simple repos with no branches (just use --oneline)"
+                ]
+            },
+            'diff': {
+                command: 'git diff',
+                eli5: "Shows exactly what lines changed in your files since the last commit. Green lines with + were added, red lines with - were removed. Only shows unstaged changes (red files in git status).",
+                example: 'git diff\n\n# Output:\n# -old line that was here\n# +new line that replaced it',
+                goodFor: [
+                    "Reviewing your changes before staging",
+                    "Seeing exactly what you modified",
+                    "Double-checking before committing"
+                ],
+                badFor: [
+                    "Staged files (use git diff --staged)",
+                    "New files (they show up in status but not diff)"
+                ]
+            },
+            'diff-staged': {
+                command: 'git diff --staged',
+                eli5: "Same as git diff, but shows what's about to be committed (the green files). This is your final review before the commit. \"Is this actually what I want to save?\"",
+                example: 'git add .\ngit diff --staged\n\n# Now shows what the commit will include\n# Last chance to catch mistakes!',
+                goodFor: [
+                    "Final review before committing",
+                    "Checking that git add grabbed the right changes",
+                    "Making sure you're not committing debug code"
+                ],
+                badFor: [
+                    "Unstaged changes (use git diff without --staged)"
+                ]
+            },
+            'show': {
+                command: 'git show <commit>',
+                eli5: "Shows everything about one specific commit: who, when, message, and all the changes. It's like opening one specific diary entry and reading the whole thing.",
+                example: 'git show abc1234\n\n# Or show the latest commit:\ngit show HEAD\n\n# Or the one before that:\ngit show HEAD~1',
+                goodFor: [
+                    "Examining what a specific commit changed",
+                    "Understanding what a teammate did",
+                    "Debugging \"what did this commit actually do?\""
+                ],
+                badFor: [
+                    "Seeing multiple commits (use git log)"
+                ]
+            },
+
+            // UNDOING STUFF
+            'checkout-file': {
+                command: 'git checkout -- <file>',
+                eli5: "The undo button for ONE file. Throws away your changes and restores the file to how it was at the last commit. Like hitting \"Revert\" in Word. Your changes are GONE - no recovery.",
+                example: '# You messed up index.html:\ngit checkout -- index.html\n\n# Or discard ALL unstaged changes:\ngit checkout -- .',
+                goodFor: [
+                    "Throwing away changes you don't want",
+                    "Resetting a file you accidentally modified",
+                    "\"Let me start this file over\""
+                ],
+                badFor: [
+                    "Files you might want later (no undo!)",
+                    "Staged changes (unstage first with git reset)"
+                ]
+            },
+            'reset-head': {
+                command: 'git reset HEAD <file>',
+                eli5: "Unstages a file - moves it from green (staged) back to red (unstaged). Your actual changes are still there, you're just telling Git \"don't include this in the next commit.\"",
+                example: '# Oops, staged too much:\ngit add .\ngit status  # passwords.txt is staged!\n\ngit reset HEAD passwords.txt\n\n# Now passwords.txt is unstaged, not going in the commit',
+                goodFor: [
+                    "Removing a file from staging",
+                    "When you git add'd too much",
+                    "Splitting a big add into smaller commits"
+                ],
+                badFor: [
+                    "Actually discarding changes (use checkout --)"
+                ]
+            },
+            'reset-soft': {
+                command: 'git reset --soft HEAD~1',
+                eli5: "Undo the last commit, but keep all the changes staged (green). The commit disappears, but your code stays exactly as it was. Good for \"I committed too early\" or \"I want to change the commit message.\"",
+                example: '# Oops, typo in commit message:\ngit commit -m "Fix bugg"  # Dammit\n\ngit reset --soft HEAD~1\ngit commit -m "Fix bug"   # Fixed!\n\n# Or combine two commits into one',
+                goodFor: [
+                    "Fixing a commit message you just made",
+                    "Uncommitting to add more changes",
+                    "Squashing your last few commits together"
+                ],
+                badFor: [
+                    "Commits you already pushed (others have them)",
+                    "When you want to discard the changes entirely (use --hard)"
+                ]
+            },
+            'reset-hard': {
+                command: 'git reset --hard HEAD~1',
+                eli5: "⚠️ DANGER ZONE. Undo the last commit AND throw away all the changes. It's like it never happened. Your code goes back to how it was before that commit. Cannot be undone easily.",
+                example: '# Last commit was garbage, burn it:\ngit reset --hard HEAD~1\n\n# Commit is gone. Changes are gone.\n# Go back 3 commits:\ngit reset --hard HEAD~3',
+                goodFor: [
+                    "Nuking a commit that should never have existed",
+                    "Starting over when things went very wrong",
+                    "Local experiments you want to completely abandon"
+                ],
+                badFor: [
+                    "Commits you already pushed (causes big problems)",
+                    "When you might want the code later (use --soft)",
+                    "If you're not 100% sure"
+                ]
+            },
+            'revert': {
+                command: 'git revert <commit>',
+                eli5: "The safe undo. Creates a NEW commit that does the opposite of an old commit. If commit A added a line, revert A removes that line. History is preserved - everyone can see \"we added this, then removed it.\" Safe for shared branches.",
+                example: 'git revert abc1234\n\n# Creates a new commit:\n# "Revert: Add login button"\n# That undoes what abc1234 did',
+                goodFor: [
+                    "Undoing a commit on a shared branch (main)",
+                    "When you need a paper trail",
+                    "Undoing a specific commit from the middle of history"
+                ],
+                badFor: [
+                    "Undoing multiple commits (gets messy)",
+                    "Local branches where reset is simpler"
+                ]
+            },
+            'clean': {
+                command: 'git clean -fd',
+                eli5: "⚠️ Nuclear option for untracked files. Deletes all files Git doesn't know about. -f means force, -d means directories too. Good for cleaning up build artifacts and junk. Your untracked work will be GONE.",
+                example: '# See what would be deleted (safe preview):\ngit clean -n\n\n# Actually delete:\ngit clean -fd\n\n# Output: Removing junk.txt\n#         Removing build/',
+                goodFor: [
+                    "Cleaning up after a build",
+                    "Removing generated files",
+                    "\"I want a clean working directory\""
+                ],
+                badFor: [
+                    "When you have new files you forgot to add",
+                    "Run git clean -n first to preview!"
+                ]
+            },
+
+            // STASHING
+            'stash': {
+                command: 'git stash',
+                eli5: "Hides your current work in a pocket dimension. Your files go back to the last commit (clean state), but your work isn't lost - it's stashed away. Perfect for \"I need to switch branches but I'm not ready to commit.\"",
+                example: '# In the middle of work, need to switch:\ngit stash\n\n# Working directory is now clean\ngit checkout other-branch\n# Do stuff...\n\ngit checkout my-branch\ngit stash pop  # Work is back!',
+                goodFor: [
+                    "Quick branch switch without committing",
+                    "Pulling when you have local changes",
+                    "\"Save my spot\" when interrupted"
+                ],
+                badFor: [
+                    "Long-term storage (commit instead)",
+                    "If you might forget about it (stashes pile up)"
+                ]
+            },
+            'stash-save': {
+                command: 'git stash save "message"',
+                eli5: "Same as git stash, but with a note so you remember what it was. When you have multiple stashes, these messages help you figure out which is which.",
+                example: 'git stash save "half-done login form"\ngit stash save "experimental dark mode"\n\ngit stash list\n# stash@{0}: On main: experimental dark mode\n# stash@{1}: On main: half-done login form',
+                goodFor: [
+                    "When you might stash multiple things",
+                    "Complex stashes you need to remember",
+                    "\"Future me will thank me\""
+                ],
+                badFor: [
+                    "Quick one-off stashes (plain stash is fine)"
+                ]
+            },
+            'stash-list': {
+                command: 'git stash list',
+                eli5: "Shows all your stashed work. Each stash has a number like stash@{0}. The newest is 0, older ones have higher numbers. Like checking your pockets for stuff you saved.",
+                example: 'git stash list\n\n# Output:\n# stash@{0}: On main: WIP - login form\n# stash@{1}: On feature: debugging\n# stash@{2}: On main: header experiment',
+                goodFor: [
+                    "Seeing what you have stashed",
+                    "Finding an old stash",
+                    "Before doing stash pop/apply"
+                ],
+                badFor: [
+                    "Nothing - it's just a list command"
+                ]
+            },
+            'stash-pop': {
+                command: 'git stash pop',
+                eli5: "Brings back your most recent stash AND removes it from the stash list. It's like pulling something out of your pocket and using it. If it applies cleanly, the stash is gone.",
+                example: 'git stash pop\n\n# Your changes are back!\n# The stash is removed from the list\n\n# Pop a specific stash:\ngit stash pop stash@{2}',
+                goodFor: [
+                    "Restoring your stashed work",
+                    "When you're done with the interruption",
+                    "Normal stash workflow"
+                ],
+                badFor: [
+                    "When you want to keep the stash around (use apply)",
+                    "If there might be conflicts (pop + conflict = messy)"
+                ]
+            },
+            'stash-apply': {
+                command: 'git stash apply',
+                eli5: "Same as pop, but KEEPS the stash in the list. Use this when you want to apply the same stash to multiple branches, or when you're not sure if it'll work.",
+                example: 'git stash apply\n\n# Your changes are back\n# But the stash still exists:\ngit stash list  # still there\n\n# Apply a specific stash:\ngit stash apply stash@{2}',
+                goodFor: [
+                    "Applying the same changes to multiple branches",
+                    "When you're unsure and want a safety net",
+                    "Testing if stash applies cleanly"
+                ],
+                badFor: [
+                    "Normal workflow (pop is cleaner)"
+                ]
+            },
+            'stash-drop': {
+                command: 'git stash drop',
+                eli5: "Deletes a stash without applying it. \"I don't need this anymore.\" Cleans up your stash list.",
+                example: 'git stash drop\n\n# Removes the most recent stash\n\n# Drop a specific one:\ngit stash drop stash@{2}',
+                goodFor: [
+                    "Cleaning up old stashes you don't need",
+                    "After git stash apply (to remove manually)",
+                    "Keeping your stash list clean"
+                ],
+                badFor: [
+                    "If you might need the stash later (no undo)"
+                ]
+            },
+
+            // TAGS
+            'tag': {
+                command: 'git tag',
+                eli5: "Lists all your tags. Tags are like bookmarks for important commits - usually version numbers like v1.0.0 or v2.3.1. Unlike branches, tags don't move - they're permanent markers.",
+                example: 'git tag\n\n# Output:\n# v1.0.0\n# v1.0.1\n# v2.0.0',
+                goodFor: [
+                    "Seeing what versions have been released",
+                    "Finding a specific release to checkout",
+                    "Quick overview of releases"
+                ],
+                badFor: [
+                    "Nothing - it's just a list command"
+                ]
+            },
+            'tag-create': {
+                command: 'git tag v1.0.0',
+                eli5: "Puts a label on the current commit. Like putting a sticky note on a page. Lightweight tag = just a name. The commit this points to will never change.",
+                example: 'git tag v1.0.0\n\n# Tag the current commit as version 1.0.0\n# That\'s it!',
+                goodFor: [
+                    "Quick version marking",
+                    "Personal projects",
+                    "When you don't need extra info"
+                ],
+                badFor: [
+                    "Official releases (use annotated tags)",
+                    "When you need to record who tagged and when"
+                ]
+            },
+            'tag-annotated': {
+                command: 'git tag -a v1.0.0 -m "msg"',
+                eli5: "Creates a tag with extra info: who created it, when, and a message. The -a means annotated. This is the professional way to mark releases.",
+                example: 'git tag -a v1.0.0 -m "First stable release"\n\n# See tag details:\ngit show v1.0.0\n# Shows tagger, date, message, and the commit',
+                goodFor: [
+                    "Official releases",
+                    "When you need to document what's in this version",
+                    "Professional/team projects"
+                ],
+                badFor: [
+                    "Quick personal bookmarks (lightweight is fine)"
+                ]
+            },
+            'push-tag': {
+                command: 'git push origin v1.0.0',
+                eli5: "Pushes ONE tag to GitHub. Tags don't get pushed with regular git push - you have to push them explicitly. This makes the tag visible on GitHub.",
+                example: 'git push origin v1.0.0\n\n# Now visible on GitHub under Releases/Tags',
+                goodFor: [
+                    "Pushing a specific release tag",
+                    "Controlled, intentional releases"
+                ],
+                badFor: [
+                    "Pushing many tags at once (use --tags)"
+                ]
+            },
+            'push-tags': {
+                command: 'git push origin --tags',
+                eli5: "Pushes ALL tags to GitHub at once. Every tag you've created locally will appear on GitHub. Use this after creating multiple version tags.",
+                example: 'git push origin --tags\n\n# All local tags are now on GitHub',
+                goodFor: [
+                    "Initial setup when you have many tags",
+                    "Syncing all tags at once"
+                ],
+                badFor: [
+                    "When you have local tags you don't want pushed",
+                    "If you want control over which tags go up"
+                ]
+            }
+        };
+
+        // Modal elements
+        const modal = document.getElementById('modal');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalClose = document.getElementById('modal-close');
+        const modalCommand = document.getElementById('modal-command');
+        const modalEli5 = document.getElementById('modal-eli5');
+        const modalExample = document.getElementById('modal-example');
+        const modalTableBody = document.getElementById('modal-table-body');
+
+        // Open modal
+        function openModal(cmdKey) {
+            const data = commandData[cmdKey];
+            if (!data) return;
+
+            modalCommand.textContent = data.command;
+            modalEli5.textContent = data.eli5;
+            modalExample.innerHTML = data.example.replace(/\n/g, '<br>');
+
+            // Build table
+            const maxRows = Math.max(data.goodFor.length, data.badFor.length);
+            let tableHtml = '';
+            for (let i = 0; i < maxRows; i++) {
+                tableHtml += '<tr>';
+                tableHtml += `<td class="p-3 border-t border-slate-700 text-slate-300">${data.goodFor[i] || ''}</td>`;
+                tableHtml += `<td class="p-3 border-t border-slate-700 text-slate-300">${data.badFor[i] || ''}</td>`;
+                tableHtml += '</tr>';
+            }
+            modalTableBody.innerHTML = tableHtml;
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeModal() {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Event listeners
+        document.querySelectorAll('[data-cmd]').forEach(el => {
+            el.addEventListener('click', () => openModal(el.dataset.cmd));
+        });
+
+        modalOverlay.addEventListener('click', closeModal);
+        modalClose.addEventListener('click', closeModal);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>
