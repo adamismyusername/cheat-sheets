@@ -2,7 +2,6 @@
 
 Quick reference guides for tools I keep forgetting. Hosted via GitHub Pages.
 
-**Live Site:** https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/
 
 ---
 
