@@ -10,7 +10,7 @@ Quick reference guides for tools I keep forgetting. Hosted via GitHub Pages.
 
 | Cheat Sheet | Description | Live Link |
 |-------------|-------------|-----------|
-| **Git & GitHub** | Commands for version control, branches, merging, remotes, undoing mistakes | [View](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/github-cheatsheet.html) |
+| **Git & GitHub** | Commands for version control, branches, merging, remotes, undoing mistakes | [View](https://adamismyusername.github.io/cheat-sheets/github.html) |
 | **Docker** | Containers, images, volumes, networks, docker-compose | *Coming Soon* |
 
 ---
